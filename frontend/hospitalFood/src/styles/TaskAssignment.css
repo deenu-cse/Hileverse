@@ -1,0 +1,40 @@
+.task-assignment-container {
+    max-width: 600px;
+    margin: 40px auto;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .task-assignment-container select,
+  .task-assignment-container input {
+    width: calc(50% - 10px);
+    padding: 10px;
+    margin: 0 5px 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    outline: none;
+  }
+  
+  .task-assignment-container select:focus,
+  .task-assignment-container input:focus {
+    border-color: #007bff;
+  }
+  
+  .task-assignment-container button {
+    margin-top: 10px;
+    width: 100%;
+  }
+  
+  .task-assignment-container select {
+    width: calc(100% - 10px);
+  }
+  
+  @media (max-width: 768px) {
+    .task-assignment-container select,
+    .task-assignment-container input {
+      width: 100%;
+    }
+  }
+  

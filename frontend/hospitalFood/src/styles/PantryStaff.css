@@ -1,0 +1,50 @@
+.pantry-staff-container {
+    max-width: 600px;
+    margin: 40px auto;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .pantry-staff-container input {
+    width: calc(33% - 10px);
+    padding: 10px;
+    margin: 0 5px 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    outline: none;
+  }
+  
+  .pantry-staff-container input:focus {
+    border-color: #007bff;
+  }
+  
+  .pantry-staff-container button {
+    margin-top: 10px;
+    width: 100%;
+  }
+  
+  .staff-list {
+    margin-top: 20px;
+  }
+  
+  .staff-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background-color: #f7f7f7;
+    border: 1px solid #ddd;
+    margin-bottom: 8px;
+    border-radius: 4px;
+  }
+  
+  .staff-item button {
+    background-color: #dc3545;
+  }
+  
+  .staff-item button:hover {
+    background-color: #c82333;
+  }
+  

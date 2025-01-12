@@ -2,11 +2,19 @@ import React, { useState } from 'react';
 import '../styles/FoodBook.css';
 
 const ReservationForm = () => {
-
     const [selectedDiseases, setSelectedDiseases] = useState([]);
     const [selectedAllergies, setSelectedAllergies] = useState([]);
+    const [formData, setFormData] = useState({
+        name: "",
+        age: "",
+        gender: "",
+        contactInfo: "",
+        emergencyContact: "",
+        roomNumber: "",
+        bedNumber: "",
+        floorNumber: ""
+    });
 
-    // Add disease to the selectedDiseases array
     const handleDiseaseChange = (event) => {
         const disease = event.target.value;
         if (disease && !selectedDiseases.includes(disease)) {
@@ -14,7 +22,6 @@ const ReservationForm = () => {
         }
     };
 
-    // Add allergy to the selectedAllergies array
     const handleAllergyChange = (event) => {
         const allergy = event.target.value;
         if (allergy && !selectedAllergies.includes(allergy)) {
@@ -22,15 +29,69 @@ const ReservationForm = () => {
         }
     };
 
-    // Remove disease from the selectedDiseases array
     const handleDeleteDisease = (disease) => {
         setSelectedDiseases(selectedDiseases.filter(d => d !== disease));
     };
 
-    // Remove allergy from the selectedAllergies array
     const handleDeleteAllergy = (allergy) => {
         setSelectedAllergies(selectedAllergies.filter(a => a !== allergy));
     };
+
+    const handleInputChange = (event) => {
+        const { id, value } = event.target;
+        setFormData({ ...formData, [id]: value });
+    };
+
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+        const payload = {
+            name: formData.name,
+            diseases: selectedDiseases.join(", "),
+            allergies: selectedAllergies.join(", "),
+            roomNumber: formData.roomNumber,
+            bedNumber: formData.bedNumber,
+            floorNumber: formData.floorNumber,
+            age: parseInt(formData.age, 10),
+            gender: formData.gender,
+            contactInfo: formData.contactInfo,
+            emergencyContact: formData.emergencyContact,
+        };
+
+        try {
+            console.log("code here....")
+            const response = await fetch('http://localhost:3000/reservations', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(payload),
+            });
+
+            if (response.ok) {
+                const result = await response.json();
+                alert('Reservation submitted successfully!');
+                setFormData({
+                    name: "",
+                    age: "",
+                    gender: "",
+                    contactInfo: "",
+                    emergencyContact: "",
+                    roomNumber: "",
+                    bedNumber: "",
+                    floorNumber: ""
+                })
+            } else {
+                alert('Failed to submit the reservation.');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            alert('An error occurred while submitting the reservation.');
+        }
+    };
+
+    console.log(formData)
+    console.log(selectedDiseases)
+    console.log(selectedAllergies)
 
     return (
         <div className="containerform">
@@ -39,61 +100,68 @@ const ReservationForm = () => {
                     <h5>Hospital Meal - Reservation</h5>
                 </div>
                 <div className="panel-body">
-                    <form className="form-horizontal" role="form">
+                    <form className="form-horizontal" role="form" onSubmit={handleSubmit}>
                         {/* Name */}
                         <div className="form-group">
-                            <h4 className="control-label col-md-2 col-md-offset-2" htmlFor="id_name">
+                            <h4 className="control-label col-md-2 col-md-offset-2" htmlFor="name">
                                 Name
                             </h4>
                             <div className="col-md-8">
-                                <div className="col-md-2 indent-small">
-                                    <select className="form-control" id="id_title">
-                                        <option>Mr</option>
-                                        <option>Ms</option>
-                                    </select>
-                                </div>
-                                <div className="col-md-3 indent-small">
-                                    <input className="form-control" id="id_first_name" type="text" placeholder="First Name" />
-                                </div>
-                                <div className="col-md-3 indent-small">
-                                    <input className="form-control" id="id_last_name" type="text" placeholder="Last Name" />
-                                </div>
-                            </div>
-                        </div>
-                        {/*diseases*/}
-                        <div className="form-group">
-                            <h4 className="control-label col-md-2 col-md-offset-2" htmlFor="id_name">
-                                Diseases
-                            </h4>
-                            <div className="col-md-8">
-                                <div className="col-md-3 indent-small">
-                                    <select className="form-control" id="id_title" onChange={handleDiseaseChange}>
-                                        <option value="">Select Disease</option>
-                                        <option>Cancer</option>
-                                        <option>Diabetes</option>
-                                        <option>Respiratory Diseases</option>
-                                        <option>Infectious Diseases</option>
-                                    </select>
-                                </div>
-                                <div className="col-md-3 indent-small">
-                                    <select className="form-control" id="id_title" onChange={handleAllergyChange}>
-                                        <option value="">Select Allergy</option>
-                                        <option>Pollen Allergy</option>
-                                        <option>Dust Mite Allergy</option>
-                                        <option>Mold Allergy</option>
-                                    </select>
-                                </div>
+                                <input
+                                    className="form-control"
+                                    id="name"
+                                    type="text"
+                                    placeholder="Full Name"
+                                    value={formData.name}
+                                    onChange={handleInputChange}
+                                />
                             </div>
                         </div>
 
-                        {/* Display selected diseases with delete buttons */}
+                        {/* Diseases */}
+                        <div className="form-group">
+                            <h4 className="control-label col-md-2 col-md-offset-2" htmlFor="diseases">
+                                Diseases
+                            </h4>
+                            <div className="col-md-8">
+                                <select className="form-control" onChange={handleDiseaseChange}>
+                                    <option value="">Select Disease</option>
+                                    <option>Cancer</option>
+                                    <option>Diabetes</option>
+                                    <option>Hypertension</option>
+                                    <option>Asthma</option>
+                                    <option>Malaria</option>
+                                    <option>Anemia</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        {/* Allergies */}
+                        <div className="form-group">
+                            <h4 className="control-label col-md-2 col-md-offset-2" htmlFor="allergies">
+                                Allergies
+                            </h4>
+                            <div className="col-md-8">
+                                <select className="form-control" onChange={handleAllergyChange}>
+                                    <option value="">Select Allergy</option>
+                                    <option>Pollen</option>
+                                    <option>Pet Allergy</option>
+                                    <option>Mold Allergy</option>
+                                    <option>Milk Allergy</option>
+                                    <option>Soy Allergy</option>
+                                    <option>Latex Allergy</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        {/* Selected Diseases & Allergies */}
                         <div className="form-group">
                             <div className="col-md-8 col-md-offset-2">
                                 {selectedDiseases.map((disease, index) => (
                                     <div key={index} className="selected-item">
                                         {disease}
                                         <button type="button" className="delete-btn" onClick={() => handleDeleteDisease(disease)}>
-                                            &#10005; {/* Cross sign */}
+                                            &#10005;
                                         </button>
                                     </div>
                                 ))}
@@ -101,30 +169,44 @@ const ReservationForm = () => {
                                     <div key={index} className="selected-item">
                                         {allergy}
                                         <button type="button" className="delete-btn" onClick={() => handleDeleteAllergy(allergy)}>
-                                            &#10005; {/* Cross sign */}
+                                            &#10005;
                                         </button>
                                     </div>
                                 ))}
                             </div>
                         </div>
 
+                        {/* Other Inputs */}
                         {/* Age */}
                         <div className="form-group">
-                            <h4 className="control-label col-md-2 col-md-offset-2" htmlFor="id_age">
+                            <h4 className="control-label col-md-2 col-md-offset-2" htmlFor="age">
                                 Age
                             </h4>
                             <div className="col-md-3">
-                                <input className="form-control" id="id_age" type="number" placeholder="Age" />
+                                <input
+                                    className="form-control"
+                                    id="age"
+                                    type="number"
+                                    placeholder="Age"
+                                    value={formData.age}
+                                    onChange={handleInputChange}
+                                />
                             </div>
                         </div>
 
                         {/* Gender */}
                         <div className="form-group">
-                            <h4 className="control-label col-md-2 col-md-offset-2" htmlFor="id_gender">
+                            <h4 className="control-label col-md-2 col-md-offset-2" htmlFor="gender">
                                 Gender
                             </h4>
                             <div className="col-md-3">
-                                <select className="form-control" id="id_gender">
+                                <select
+                                    className="form-control"
+                                    id="gender"
+                                    value={formData.gender}
+                                    onChange={handleInputChange}
+                                >
+                                    <option value="">Select Gender</option>
                                     <option>Male</option>
                                     <option>Female</option>
                                     <option>Other</option>
@@ -134,55 +216,79 @@ const ReservationForm = () => {
 
                         {/* Contact Info */}
                         <div className="form-group">
-                            <h4 className="control-label col-md-2 col-md-offset-2" htmlFor="id_contactInfo">
+                            <h4 className="control-label col-md-2 col-md-offset-2" htmlFor="contactInfo">
                                 Contact Info
                             </h4>
                             <div className="col-md-6">
-                                <input className="form-control" id="id_contactInfo" type="text" placeholder="E-mail" />
-                                <input className="form-control" id="id_phone" type="text" placeholder="Phone: (xxx) - xxx xxxx" />
-                            </div>
-                        </div>
-
-                        {/* Emergency Contact */}
-                        <div className="form-group">
-                            <h4 className="control-label col-md-2 col-md-offset-2" htmlFor="id_emergencyContact">
-                                Emergency Contact
-                            </h4>
-                            <div className="col-md-6">
-                                <input className="form-control" id="id_emergencyContact" type="text" placeholder="Emergency Contact Name" />
-                                <input className="form-control" id="id_emergencyPhone" type="text" placeholder="Emergency Contact Phone" />
+                                <input
+                                    className="form-control"
+                                    id="contactInfo"
+                                    type="text"
+                                    placeholder="E-mail"
+                                    value={formData.contactInfo}
+                                    onChange={handleInputChange}
+                                />
+                                <input
+                                    className="form-control"
+                                    id="emergencyContact"
+                                    type="text"
+                                    placeholder="Emergency Contact"
+                                    value={formData.emergencyContact}
+                                    onChange={handleInputChange}
+                                />
                             </div>
                         </div>
 
                         {/* Room, Bed, and Floor */}
                         <div className="form-group">
-                            <h4 className="control-label col-md-2 col-md-offset-2" htmlFor="id_roomNumber">
+                            <h4 className="control-label col-md-2 col-md-offset-2" htmlFor="roomNumber">
                                 Room Number
                             </h4>
                             <div className="col-md-3">
-                                <input className="form-control" id="id_roomNumber" type="text" placeholder="Room Number" />
+                                <input
+                                    className="form-control"
+                                    id="roomNumber"
+                                    type="text"
+                                    placeholder="Room Number"
+                                    value={formData.roomNumber}
+                                    onChange={handleInputChange}
+                                />
                             </div>
                         </div>
 
                         <div className="form-group">
-                            <h4 className="control-label col-md-2 col-md-offset-2" htmlFor="id_bedNumber">
+                            <h4 className="control-label col-md-2 col-md-offset-2" htmlFor="bedNumber">
                                 Bed Number
                             </h4>
                             <div className="col-md-3">
-                                <input className="form-control" id="id_bedNumber" type="text" placeholder="Bed Number" />
+                                <input
+                                    className="form-control"
+                                    id="bedNumber"
+                                    type="text"
+                                    placeholder="Bed Number"
+                                    value={formData.bedNumber}
+                                    onChange={handleInputChange}
+                                />
                             </div>
                         </div>
 
                         <div className="form-group">
-                            <h4 className="control-label col-md-2 col-md-offset-2" htmlFor="id_floorNumber">
+                            <h4 className="control-label col-md-2 col-md-offset-2" htmlFor="floorNumber">
                                 Floor Number
                             </h4>
                             <div className="col-md-3">
-                                <input className="form-control" id="id_floorNumber" type="text" placeholder="Floor Number" />
+                                <input
+                                    className="form-control"
+                                    id="floorNumber"
+                                    type="text"
+                                    placeholder="Floor Number"
+                                    value={formData.floorNumber}
+                                    onChange={handleInputChange}
+                                />
                             </div>
                         </div>
 
-                        {/* Submit and Cancel Buttons */}
+                        {/* Submit Button */}
                         <div className="form-group">
                             <div className="col-md-offset-4 col-md-3">
                                 <button className="btn-lg btn-primary" type="submit">

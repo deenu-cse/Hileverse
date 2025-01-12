@@ -1,0 +1,39 @@
+.task-tracker-container {
+    max-width: 800px;
+    margin: 40px auto;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .task-tracker-container table {
+    margin-top: 20px;
+    width: 100%;
+    background-color: #f9f9f9;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  
+  .task-tracker-container th {
+    background-color: #007bff;
+    color: white;
+    text-align: center;
+  }
+  
+  .task-tracker-container td {
+    text-align: center;
+  }
+  
+  .task-tracker-container select {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    outline: none;
+    background-color: #fff;
+  }
+  
+  .task-tracker-container select:focus {
+    border-color: #007bff;
+  }
+  

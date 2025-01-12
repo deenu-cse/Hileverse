@@ -4,9 +4,12 @@ const cors = require('cors');
 const Connectdb = require('./utils/db');
 const Routes = require('./Routes/allRoutes')
 
+
 app.use(cors());
 
 app.use(express.json());
+
+app.use('/', Routes)
 
 app.post("/", (req, res) => {
     try {
@@ -23,7 +26,6 @@ app.post("/", (req, res) => {
     }
 });
 
-app.use('/', Routes)
 
 const PORT = process.env.PORT || 3000;
 
